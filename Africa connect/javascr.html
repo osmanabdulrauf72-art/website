@@ -1,0 +1,125 @@
+```javascript
+// AFRICA CONNECT JAVASCRIPT
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // 1. Dynamic copyright year
+    const footer = document.querySelector("footer");
+
+    if (footer) {
+        const copyright = footer.querySelector("p:last-child");
+
+        if (copyright) {
+            copyright.innerHTML =
+                "&copy; " + new Date().getFullYear() +
+                " Africa Connect. All rights reserved.";
+        }
+    }
+
+    // 2. Smooth scrolling for navigation links
+    const navigationLinks = document.querySelectorAll(
+        'nav a[href^="#"]'
+    );
+
+    navigationLinks.forEach(function (link) {
+        link.addEventListener("click", function (event) {
+            const targetId = link.getAttribute("href");
+            const targetSection = document.querySelector(targetId);
+
+            if (targetSection) {
+                event.preventDefault();
+
+                targetSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+                history.replaceState(null, "", targetId);
+            }
+        });
+    });
+
+    // 3. Handle images that fail to load
+    const images = document.querySelectorAll("img");
+
+    images.forEach(function (image) {
+        image.addEventListener("error", function () {
+            image.alt = "Africa Connect image is currently unavailable";
+            image.style.backgroundColor = "#06142e";
+            image.style.minHeight = "150px";
+            image.style.objectFit = "contain";
+        });
+    });
+
+    // 4. Highlight the active navigation link
+    const sections = document.querySelectorAll("main section");
+
+    function updateActiveLink() {
+        let currentSection = "";
+
+        sections.forEach(function (section) {
+            const sectionTop = section.getBoundingClientRect().top;
+
+            if (sectionTop <= 150) {
+                currentSection = section.getAttribute("id");
+            }
+        });
+
+        navigationLinks.forEach(function (link) {
+            const isActive =
+                link.getAttribute("href") === "#" + currentSection;
+
+            if (isActive) {
+                link.style.color = "#65d6ff";
+                link.setAttribute("aria-current", "location");
+            } else {
+                link.style.color = "";
+                link.removeAttribute("aria-current");
+            }
+        });
+    }
+
+    window.addEventListener("scroll", updateActiveLink);
+    updateActiveLink();
+
+    // 5. Create a scroll-to-top button
+    const backToTop = document.createElement("button");
+
+    backToTop.textContent = "↑";
+    backToTop.setAttribute("aria-label", "Back to top");
+
+    backToTop.style.position = "fixed";
+    backToTop.style.bottom = "25px";
+    backToTop.style.right = "25px";
+    backToTop.style.width = "48px";
+    backToTop.style.height = "48px";
+    backToTop.style.border = "none";
+    backToTop.style.borderRadius = "50%";
+    backToTop.style.backgroundColor = "#0066cc";
+    backToTop.style.color = "#ffffff";
+    backToTop.style.fontSize = "26px";
+    backToTop.style.cursor = "pointer";
+    backToTop.style.display = "none";
+    backToTop.style.zIndex = "1000";
+
+    document.body.appendChild(backToTop);
+
+    window.addEventListener("scroll", function () {
+        backToTop.style.display =
+            window.scrollY > 300 ? "block" : "none";
+    });
+
+    backToTop.addEventListener("click", function () {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
+    // 6. Welcome message in the browser console
+    console.log(
+        "Welcome to Africa Connect — African Talent, Global Opportunities!"
+    );
+
+});
+```
